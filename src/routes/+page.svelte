@@ -1,16 +1,19 @@
-<div class="flex flex-row h-screen bg-gray-800">
-    <div class="flex flex-col p-2 text-white items-start">
+<div class="flex flex-row flex-grow bg-gray-800 items-center p-4">
+    <div class="flex flex-col p-4 text-white items-start">
         <h1 class="text-6xl font-bold bg-gradient-to-r from-blue-500 to-pink-700 inline-block text-transparent bg-clip-text leading-tight">
             Next Level Album Voting
         </h1>
-        <p class="text-white text-2xl">Wanna feed your dogs like Mardi Gras?</p>
-        <p class="text-white text-xl">Vote for it!</p>
-        <button class="rounded-full bg-blue-500 pl-4 pr-4 pt-1 pb-1 font-bold">Vote</button>
+        <p class="text-white text-3xl">Wanna feed your dogs like Mardi Gras?</p>
+        <div class="pt-10">
+            <button class="rounded-full bg-blue-500 pl-4 pr-4 pt-2 pb-2 text-xl font-bold">Vote</button>
+        </div>
+        
     </div>
-    <div class="flex flex-col text-white p-2">
+    <div class="flex flex-col flex-1 text-white p-4 items-end">
         <img
-            class="w-80 h-80"
+            class="w-96 h-96 transform transition-transform duration-300 hover:rotate-3"
             src="https://i.discogs.com/rObvAZc7_iGhjPqHp2cQ_srbEmbm-7tjnW7ULLsfoGg/rs:fit/g:sm/q:90/h:600/w:592/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE2ODAx/OTc3LTE2MDk5MTEy/ODItMzYyMC5qcGVn.jpeg"
+            alt="Album Cover for DOG by Kahlil Blu"
         />
         <p class="">DOG - Kahlil Blu</p>
     </div>

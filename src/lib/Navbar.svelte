@@ -2,7 +2,7 @@
     import dino from '$lib/dino.png'
 </script>
 
-<nav class="flex flex-row flex-1 text-white space-x-4 p-1 items-center bg-gray-900">
+<nav class="flex flex-row flex-grow text-white space-x-4 p-2 items-center bg-gray-900">
     <a href="/" class="flex flex-row items-center text-3xl font-semibold">
         <img
             class="w-10 h-10 mr-2"

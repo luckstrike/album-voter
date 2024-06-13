@@ -15,6 +15,6 @@
             src="https://i.discogs.com/rObvAZc7_iGhjPqHp2cQ_srbEmbm-7tjnW7ULLsfoGg/rs:fit/g:sm/q:90/h:600/w:592/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTE2ODAx/OTc3LTE2MDk5MTEy/ODItMzYyMC5qcGVn.jpeg"
             alt="Album Cover for DOG by Kahlil Blu"
         />
-        <p class="text-lg">DOG - Kahlil Blu</p>
+        <p class="text-lg">runway talk - Kahlil Blu</p>
     </div>
 </div>

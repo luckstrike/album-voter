@@ -29,10 +29,12 @@
         <a href="/vote">Vote</a>
     </div>
 
-    {#if !data.user}
-        <a href="auth/login" class="p-2">Log In</a>
-    {:else}
-        <a href="" on:click={ () => handleLogout(data.supabase) } class="p-2">Log out</a>
-    {/if}
+    <div>
+        {#if !data.user}
+            <a href="auth/login" class="p-2">Log In</a>
+        {:else}
+            <a href="" on:click={ () => handleLogout(data.supabase) } class="p-2">Log out</a>
+        {/if}
+    </div>
 
 </nav>

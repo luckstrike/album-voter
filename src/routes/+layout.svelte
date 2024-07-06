@@ -4,8 +4,6 @@
 
     import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { error } from '@sveltejs/kit';
-	import type { SupabaseClient } from "@supabase/supabase-js";
 
 	export let data;
 	$: ({ session, supabase } = data);
@@ -20,27 +18,14 @@
 		return () => data.subscription.unsubscribe();
 	});
 
-	/*
-	const handleLogout = async (supabase: SupabaseClient) => {
-		try {
-			const logOutError = await supabase.auth.signOut();
-
-			if (logOutError.error) {
-				throw logOutError.error;
-			}
-		} catch (err) {
-			return {success: false, message: "Unable to logout"}
-		}
-	}
-	*/
-
 	// For debugging purposes
 
-
+	/*
 	if (data.user) {
 		console.log("[root +layout.svelte DEBUG]: User: ")
 		console.log(data.user)
 	}
+	*/
 
 </script>
 

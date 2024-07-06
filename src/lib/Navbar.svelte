@@ -15,5 +15,5 @@
         <a href="/">Home</a>
         <a href="/vote">Vote</a>
     </div>
-    <a href="/login" class="p-2">Log In</a>
+    <a href="auth/login" class="p-2">Log In</a>
 </nav>

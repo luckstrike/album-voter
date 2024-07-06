@@ -3,6 +3,8 @@
 
 <script lang="ts">
     import MdiArrowRightBold from '~icons/mdi/arrow-right-bold';
+
+    
 </script>
 
 <div class="flex flex-row flex-grow bg-gray-800 items-center p-16 space-x-8">

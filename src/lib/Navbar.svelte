@@ -1,18 +1,6 @@
 <script lang="ts">
     import dino from '$lib/dino.png';
-	import type { SupabaseClient } from '@supabase/supabase-js';
-	import { error } from '@sveltejs/kit';
     export let data;
-
-    async function handleLogout(supabase: SupabaseClient) {
-        try {
-            const { error } = await supabase.auth.signOut();
-        } catch (e) {
-            error(403, "Unable to logout")
-        }
-        
-    }
-
 </script>
 
 <nav class="flex flex-row flex-grow justify-between text-white p-2 items-center bg-gray-900">
@@ -33,7 +21,7 @@
         {#if !data.user}
             <a href="auth/login" class="p-2">Log In</a>
         {:else}
-            <a href="" on:click={ () => handleLogout(data.supabase) } class="p-2">Log out</a>
+            <a href="auth/logout" class="p-2">Log out</a>
         {/if}
     </div>
 

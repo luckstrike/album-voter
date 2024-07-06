@@ -18,15 +18,18 @@
 		return () => data.subscription.unsubscribe();
 	});
 
+	// For debugging purposes
+	/*
 	if (data.user)
 		console.log("[root +layout.svelte DEBUG]: User: ")
 		console.log(data.user)
+	*/
 
 </script>
 
 <div class="flex flex-col h-screen">
     <div class="flex bg-gray-800">
-        <Navbar/>
+        <Navbar user={ data.user }/>
     </div>
 
     <!-- Any content that we want will now fill this slot tag -->

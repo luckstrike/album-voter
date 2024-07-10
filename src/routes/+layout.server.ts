@@ -18,8 +18,8 @@ export const load: LayoutServerLoad = async ({ locals: { session }, cookies }) =
     try {
       const existingUser = await db.query.usersTable.findFirst({
       where: and(
-        eq(usersTable.provider, provider),
-        eq(usersTable.provider_user_id, provider_user_id)
+        eq(usersTable.provider, provider as string),
+        eq(usersTable.provider_user_id, provider_user_id as string)
       ),
     });
 

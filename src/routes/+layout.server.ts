@@ -14,8 +14,6 @@ export const load: LayoutServerLoad = async ({ locals: { session }, cookies }) =
     const provider_id = provider + ":" + provider_user_id
     const user_email = user.email;
 
-    console.log(provider, provider_user_id, user_email)
-
     // Checking if the user already exists in the users table
     try {
       const existingUser = await db.query.usersTable.findFirst({

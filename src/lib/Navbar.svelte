@@ -15,6 +15,7 @@
         </a>
         <a href="/">Home</a>
         <a href="/vote">Vote</a>
+        <a href="/poll">Create a Poll</a>
     </div>
 
     <div>

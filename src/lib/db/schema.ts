@@ -27,6 +27,7 @@ export const albumsTable = pgTable('albums', {
   release_year: integer('release_year')
 });
 
+// Poll Albums Table (Kind of like the glue between polls and albums)
 export const pollAlbumsTable = pgTable('poll_albums', {
   poll_albums_id: uuid('poll_albums_id').defaultRandom().primaryKey(),
   poll_id: uuid('poll_id').notNull().references(() => pollsTable.poll_id),

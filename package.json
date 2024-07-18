@@ -42,6 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@spotify/web-api-ts-sdk": "^1.2.0",
 		"@supabase/ssr": "^0.4.0",
 		"@supabase/supabase-js": "^2.44.2",
 		"dotenv": "^16.4.5",

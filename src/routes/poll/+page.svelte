@@ -22,6 +22,17 @@
         }
     }, 300);
 
+    function removeDuplicates(albums: any[]): any[] {
+        const uniqueAlbums = new Map();
+
+        return albums.filter(album => {
+            const duplicate = uniqueAlbums.has(album.name);
+
+            if (!duplicate) uniqueAlbums.set(album.name, true);
+            return !duplicate;
+        })
+    }
+
     async function handleSearch(searchQuery: string) {
         try {
             const response = await fetch('/api/spotify', {
@@ -39,8 +50,9 @@
             const data = await response.json();
 
             /// Returning only the list of albums
-            const filteredAlbums = data.albums.items
-                .filter((result: any) => result.album_type === 'album')
+            const filteredAlbums = removeDuplicates(
+                data.albums.items
+                .filter((result: any) => result.album_type === 'album'))
                 .slice(0, MAX_DISPLAYED_ALBUMS);
 
             return filteredAlbums;
@@ -92,7 +104,7 @@
                         class="p-2 hover:bg-gray-100 cursor-pointer"
                         on:click={() => selectResult(result)}
                     >
-                        {result.name} <!-- Adjust this based on your result structure -->
+                        {result.name}
                     </div>
                 {/each}
             </div>

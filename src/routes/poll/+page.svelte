@@ -70,21 +70,21 @@
     <div class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-pink-700 inline-block text-transparent bg-clip-text leading-tight">
         Create a Poll
     </div>
-    <div class="relative w-1/3 search-container">
-        <div class="flex flex-row text-black bg-white rounded-lg m-4 pt-1 items-center">
-            <div class="p-1 pl-2 pr-2">
+    <div class="flex flex-col items-center w-1/3">
+        <div class="flex flex-row text-black bg-white rounded-lg w-full mt-4 items-center">
+            <div class="p-1 pl-2">
                 <MaterialSymbolsSearch/>
             </div>
             <input 
                 bind:value={albumSearch}
                 on:input={handleInput}
-                class="w-full focus:outline-none focus:ring-0" 
+                class="w-full focus:outline-none rounded-lg focus:ring-0 pt-2 pb-2 pl-1 pr-2"
                 type="search" 
                 placeholder="Search..."
             />
         </div>
         {#if showDropdown && searchResults.length > 0}
-            <div class="z-10 w-full text-black bg-white border border-gray-300 rounded-lg shadow-lg">
+            <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
                 {#each searchResults as result}
                     <div 
                         class="p-2 hover:bg-gray-100 cursor-pointer"
@@ -97,6 +97,6 @@
         {/if}
     </div>
     {#if error}
-        <div class="text-red-500">{error}</div>
+        <div class="text-red-500 mt-2">{error}</div>
     {/if}
 </div>

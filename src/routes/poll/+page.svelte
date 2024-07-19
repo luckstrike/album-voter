@@ -9,6 +9,8 @@
     let searchResults: any[] = [];
     let error: string | null = null;
 
+    const MAX_DISPLAYED_ALBUMS: number = 5;
+
     const handleInput = debounce(async () => {
         if (albumSearch.length > 2) {
             const data = await handleSearch(albumSearch);
@@ -37,9 +39,9 @@
             const data = await response.json();
 
             /// Returning only the list of albums
-            const filteredAlbums = data.albums.items.filter((result: any) => {
-                return result.album_type === 'album';
-            });
+            const filteredAlbums = data.albums.items
+                .filter((result: any) => result.album_type === 'album')
+                .slice(0, MAX_DISPLAYED_ALBUMS);
 
             return filteredAlbums;
 

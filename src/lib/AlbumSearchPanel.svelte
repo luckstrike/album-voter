@@ -2,6 +2,7 @@
 	import { debounce } from 'lodash-es';
 	import { createEventDispatcher } from 'svelte';
 	import MaterialSymbolsSearch from '~icons/material-symbols/search';
+	import IcBaselinePlus from '~icons/ic/baseline-plus';
 
 	export let initialSearchResults: any[] = [];
 	let className = '';
@@ -11,6 +12,8 @@
 	let searchResults = initialSearchResults;
 	let isLoading = false;
 	let error: string | null = null;
+
+	let selectedAlbums: any[] = [];
 
 	const MAX_DISPLAYED_ALBUMS = 10; // Define this constant
 
@@ -54,11 +57,10 @@
 
 			const data = await response.json();
 
-			console.log(data.albums.items);
-
 			// Returning only the list of albums
 			const filteredAlbums = removeDuplicates(
-				data.albums.items.filter((result: any) => result.album_type === 'album')
+				data.albums.items
+					.filter((result: any) => result.album_type === 'album')
 			).slice(0, MAX_DISPLAYED_ALBUMS);
 
 			return filteredAlbums;
@@ -69,7 +71,21 @@
 	}
 
 	function selectResult(result: any) {
-		dispatch('select', result);
+		if (selectedAlbums.some(album => album.id === result.id)) {
+			return; // prevents reselection
+		}
+
+		selectedAlbums = [...selectedAlbums, result];
+		
+		dispatch('albumSelected', { id: result.id, selectedAlbums: selectedAlbums });
+		
+		// Force re-render
+		searchResults = [...searchResults];
+	}
+
+	function isSelected(albumId: string) {
+		const selected = selectedAlbums.some(album => album.id === albumId);
+		return selected;
 	}
 </script>
 
@@ -87,40 +103,47 @@
 		/>
 	</div>
 
-  <div class="flex-1 overflow-hidden flex justify-center">
-    <div aria-live="polite" class="w-full">
-        {#if isLoading}
-            <div class="text-white text-center">Loading...</div>
-        {:else if searchResults.length > 0}
-            <div class="h-full overflow-y-auto flex-1 w-full" role="list" aria-label="Search results">
-                {#each searchResults as result}
-                    <div
-                        class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg w-full"
-                        on:click={() => selectResult(result)}
-                        role="button"
-                        aria-label={`Select ${result.name} by ${result.artists[0].name}`}
-                        tabindex="0"
-                        on:keypress={(e) => e.key === 'Enter' && selectResult(result)}
-                    >
-                        <img
-                            src={result.images[2].url}
-                            alt={result.name}
-                            class="w-16 h-16 object-cover rounded flex-shrink-0"
-                        />
-                        <div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
-                            <div class="font-semibold text-black truncate">{result.name}</div>
-                            <div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
-                        </div>
-                    </div>
-                {/each}
-            </div>
-        {:else if searchQuery !== ''}
-            <div class="text-white text-center">No results found</div>
-        {/if}
-    </div>
-</div>
+	<div class="flex-1 overflow-hidden flex justify-center">
+		<div aria-live="polite" class="w-full">
+			{#if isLoading}
+				<div class="text-white text-center">Loading...</div>
+			{:else if searchResults.length > 0}
+				<div class="h-full overflow-y-auto flex-1 w-full" role="list" aria-label="Search results">
+					{#each searchResults as result}
+						<div
+							class="flex p-2 cursor-pointer mb-2 rounded-lg w-full
+								{isSelected(result.id) 
+									? 'bg-red-500 opacity-50 cursor-not-allowed' 
+									: 'bg-blue-500 hover:bg-gray-100'}"
+							on:click={() => selectResult(result)}
+							role="button"
+							aria-label={`Select ${result.name} by ${result.artists[0].name}`}
+							tabindex={isSelected(result.id) ? -1 : 0}
+							on:keypress={(e) =>
+								!isSelected(result.id) && e.key === 'Enter' && selectResult(result)}
+						>
+							<img
+								src={result.images[2].url}
+								alt={result.name}
+								class="w-16 h-16 object-cover rounded flex-shrink-0"
+							/>
+							<div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
+								<div class="font-semibold text-black truncate">{result.name}</div>
+								<div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
+							</div>
+							{#if !isSelected(result.id)}
+								<IcBaselinePlus class="text-black" />
+							{/if}
+						</div>
+					{/each}
+				</div>
+			{:else if searchQuery !== ''}
+				<div class="text-white text-center">No results found</div>
+			{/if}
+		</div>
+	</div>
 
-{#if error}
-    <div class="text-red-500 mt-2 flex-shrink-0" aria-live="assertive">{error}</div>
-{/if}
+	{#if error}
+		<div class="text-red-500 mt-2 flex-shrink-0" aria-live="assertive">{error}</div>
+	{/if}
 </div>

@@ -1,17 +1,18 @@
 <script lang="ts">
-    import AlbumSearchPanel from '$lib/AlbumSearchPanel.svelte'
+  import AlbumSearchPanel from '$lib/AlbumSearchPanel.svelte'
 	import PollCreator from '$lib/PollCreator.svelte';
 
     let error = null;
+
+    let pollAlbums: any[] = [];
 
     function handleSearchError(event) {
         error = event.detail.message;
     }
 
     function handleAlbumSelect(event) {
-        const selectedAlbum = event.detail;
-        // Handle the selected album (e.g., add it to the poll)
-        console.log('Selected album:', selectedAlbum);
+      const { id, selectedAlbums } = event.detail;
+      pollAlbums = selectedAlbums;
     }
 
 </script>
@@ -25,13 +26,13 @@
       <AlbumSearchPanel 
         class="w-1/2 h-full overflow-hidden" 
         on:error={handleSearchError} 
-        on:select={handleAlbumSelect}
+        on:albumSelected={handleAlbumSelect}
       />
   
       {#if error}
         <p class="mt-2 text-red-500">{error}</p>
       {/if}
   
-      <PollCreator class="w-2/5 h-full overflow-hidden" />
+      <PollCreator albums={pollAlbums} class="w-5/12 h-full overflow-hidden" />
     </div>
 </main>

@@ -29,7 +29,7 @@
 
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen w-screen">
     <div class="flex bg-gray-800">
         <Navbar data={ data }/>
     </div>

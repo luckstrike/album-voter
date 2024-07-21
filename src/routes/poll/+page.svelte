@@ -1,113 +1,37 @@
 <script lang="ts">
-    import MaterialSymbolsSearch from '~icons/material-symbols/search';
-    import { debounce } from 'lodash-es';
-	import { onMount } from 'svelte';
-    import SearchBar from '$lib/SearchBar.svelte'
+    import AlbumSearchPanel from '$lib/AlbumSearchPanel.svelte'
+	import PollCreator from '$lib/PollCreator.svelte';
 
-    let albumSearch: string;
-    let isSearching: boolean = false;
-    let searchResults: any[] = [];
-    let error: string | null = null;
+    let error = null;
 
-    const MAX_DISPLAYED_ALBUMS: number = 5;
-
-    const handleInput = debounce(async () => {
-        if (albumSearch.length > 2) {
-            const data = await handleSearch(albumSearch);
-            searchResults = data;
-        } else {
-            searchResults = [];
-        }
-    }, 300);
-
-    function removeDuplicates(albums: any[]): any[] {
-        const uniqueAlbums = new Map();
-
-        return albums.filter(album => {
-            const duplicate = uniqueAlbums.has(album.name);
-
-            if (!duplicate) uniqueAlbums.set(album.name, true);
-            return !duplicate;
-        })
+    function handleSearchError(event) {
+        error = event.detail.message;
     }
 
-    async function handleSearch(searchQuery: string) {
-        try {
-            const response = await fetch('/api/spotify', {
-                method: 'POST',
-                body: JSON.stringify({ query: searchQuery }),
-                headers: {
-                'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-
-            console.log(data.albums.items)
-
-            /// Returning only the list of albums
-            const filteredAlbums = removeDuplicates(
-                data.albums.items
-                .filter((result: any) => result.album_type === 'album'))
-                .slice(0, MAX_DISPLAYED_ALBUMS);
-
-            return filteredAlbums;
-
-        } catch (err) {
-            error = err.message;
-        } finally {
-            isSearching = false;
-        }
+    function handleAlbumSelect(event) {
+        const selectedAlbum = event.detail;
+        // Handle the selected album (e.g., add it to the poll)
+        console.log('Selected album:', selectedAlbum);
     }
-
-    function selectResult(result: any) {
-        albumSearch = result.name;
-    }
-
-    onMount(() => {
-        document.addEventListener('click', (event: MouseEvent) => {
-            const target = event.target as HTMLElement;
-        });
-    });
 
 </script>
 
-<div class="flex flex-col flex-grow text-white bg-gray-800 p-4 items-center">
-    <div class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-pink-700 inline-block text-transparent bg-clip-text leading-tight">
-        Create a Poll
+<main class="flex flex-col h-screen p-4 text-white bg-gray-800 items-center overflow-hidden">
+    <h1 class="text-4xl font-bold leading-tight bg-gradient-to-r from-blue-500 to-pink-700 bg-clip-text text-transparent mb-4">
+      Create a Poll
+    </h1>
+  
+    <div class="flex w-full flex-1 justify-between overflow-hidden">
+      <AlbumSearchPanel 
+        class="w-2/5 h-full overflow-hidden" 
+        on:error={handleSearchError} 
+        on:select={handleAlbumSelect}
+      />
+  
+      {#if error}
+        <p class="mt-2 text-red-500">{error}</p>
+      {/if}
+  
+      <PollCreator class="w-1/2 h-full overflow-hidden" />
     </div>
-    <div class="flex flex-row w-full h-full justify-between m-2">
-        <div class="flex flex-col w-2/5 h-full bg-slate-900 rounded-lg">
-            <SearchBar bind:value={albumSearch} on:input={handleInput} />
-            <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
-                Test
-            </div>
-            {#if searchResults.length > 0}
-                <div class="flex flex-col w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
-                    {#each searchResults as result}
-                        <div 
-                            class="flex flex-row p-2 hover:bg-gray-100 cursor-pointer"
-                            on:click={() => selectResult(result)}
-                        >
-                            <img src={result.images[2].url}/>
-                            <div class="flex flex-col justify-center p-2">
-                                <div>{result.name}</div>
-                                <div>{result.artists[0].name}</div>
-                            </div>
-                        </div>
-                    {/each}
-                </div>
-            {/if}
-        </div>
-        {#if error}
-            <div class="text-red-500 mt-2">{error}</div>
-        {/if}
-        <div class="flex flex-col bg-slate-900 rounded-lg w-1/2 h-[100%]">
-            <div class="flex flex-col text-center">Your Poll</div>
-        </div>
-    </div>
-</div>
+</main>

@@ -74,43 +74,47 @@
 </script>
 
 <div class="flex flex-col bg-slate-900 rounded-lg p-4 {className}">
-  <div class="flex items-center w-full h-12 text-black bg-white rounded-lg mb-4 flex-shrink-0">
-    <div class="p-1 pl-2">
-      <MaterialSymbolsSearch />
-    </div>
-    <input
-      bind:value={searchQuery}
-      on:input={handleInput}
-      class="w-full pt-2 pb-2 pl-1 pr-2 rounded-lg focus:outline-none focus:ring-0"
-      type="search"
-      placeholder="Search for albums..."
-    />
-  </div>
+	<div class="flex items-center w-full h-12 text-black bg-white rounded-lg mb-4 flex-shrink-0">
+		<div class="p-1 pl-2">
+			<MaterialSymbolsSearch />
+		</div>
+		<input
+			bind:value={searchQuery}
+			on:input={handleInput}
+			class="w-full pt-2 pb-2 pl-1 pr-2 rounded-lg focus:outline-none focus:ring-0"
+			type="search"
+			placeholder="Search for albums..."
+		/>
+	</div>
 
-  <div class="flex-1 overflow-hidden flex justify-center">
-    {#if isLoading}
-      <div class="text-white text-center">Loading...</div>
-    {:else if searchResults.length > 0}
-      <div class="h-full overflow-y-auto flex-1">
-        {#each searchResults as result}
-          <div
-            class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg"
-            on:click={() => selectResult(result)}
-          >
-            <img src={result.images[2].url} alt={result.name} class="w-16 h-16 object-cover rounded flex-shrink-0" />
-            <div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
-              <div class="font-semibold text-black truncate">{result.name}</div>
-              <div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
-            </div>
-          </div>
-        {/each}
-      </div>
-    {:else if searchQuery !== ''}
-      <div class="text-white text-center">No results found</div>
-    {/if}
-  </div>
+	<div class="flex-1 overflow-hidden flex justify-center">
+		{#if isLoading}
+			<div class="text-white text-center">Loading...</div>
+		{:else if searchResults.length > 0}
+			<div class="h-full overflow-y-auto flex-1">
+				{#each searchResults as result}
+					<div
+						class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg"
+						on:click={() => selectResult(result)}
+					>
+						<img
+							src={result.images[2].url}
+							alt={result.name}
+							class="w-16 h-16 object-cover rounded flex-shrink-0"
+						/>
+						<div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
+							<div class="font-semibold text-black truncate">{result.name}</div>
+							<div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else if searchQuery !== ''}
+			<div class="text-white text-center">No results found</div>
+		{/if}
+	</div>
 
-  {#if error}
-    <div class="text-red-500 mt-2 flex-shrink-0">{error}</div>
-  {/if}
+	{#if error}
+		<div class="text-red-500 mt-2 flex-shrink-0">{error}</div>
+	{/if}
 </div>

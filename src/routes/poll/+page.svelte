@@ -23,7 +23,7 @@
   
     <div class="flex w-full flex-1 justify-between overflow-hidden">
       <AlbumSearchPanel 
-        class="w-2/5 h-full overflow-hidden" 
+        class="w-1/2 h-full overflow-hidden" 
         on:error={handleSearchError} 
         on:select={handleAlbumSelect}
       />
@@ -32,6 +32,6 @@
         <p class="mt-2 text-red-500">{error}</p>
       {/if}
   
-      <PollCreator class="w-1/2 h-full overflow-hidden" />
+      <PollCreator class="w-2/5 h-full overflow-hidden" />
     </div>
 </main>

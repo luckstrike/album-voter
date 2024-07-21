@@ -46,6 +46,8 @@
 
             const data = await response.json();
 
+            console.log(data.albums.items)
+
             /// Returning only the list of albums
             const filteredAlbums = removeDuplicates(
                 data.albums.items
@@ -63,15 +65,11 @@
 
     function selectResult(result: any) {
         albumSearch = result.name;
-        showDropdown = false;
     }
 
     onMount(() => {
         document.addEventListener('click', (event: MouseEvent) => {
             const target = event.target as HTMLElement;
-            if (!target.closest('.search-container')) {
-                showDropdown = false;
-            }
         });
     });
 
@@ -100,14 +98,21 @@
                     placeholder="Search..."
                 />
             </div>
+            <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
+                Test
+            </div>
             {#if searchResults.length > 0}
-                <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
+                <div class="flex flex-col w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
                     {#each searchResults as result}
                         <div 
-                            class="p-2 hover:bg-gray-100 cursor-pointer"
+                            class="flex flex-row p-2 hover:bg-gray-100 cursor-pointer"
                             on:click={() => selectResult(result)}
                         >
-                            {result.name}
+                            <img src={result.images[2].url}/>
+                            <div class="flex flex-col justify-center p-2">
+                                <div>{result.name}</div>
+                                <div>{result.artists[0].name}</div>
+                            </div>
                         </div>
                     {/each}
                 </div>

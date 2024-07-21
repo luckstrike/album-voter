@@ -2,6 +2,7 @@
     import MaterialSymbolsSearch from '~icons/material-symbols/search';
     import { debounce } from 'lodash-es';
 	import { onMount } from 'svelte';
+    import SearchBar from '$lib/SearchBar.svelte'
 
     let albumSearch: string;
     let isSearching: boolean = false;
@@ -79,25 +80,9 @@
     <div class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-pink-700 inline-block text-transparent bg-clip-text leading-tight">
         Create a Poll
     </div>
-    <!-- Or I could turn the search bar into a rectangle component that searches for stuff
-         and updates the albums found without showing a dropdown
-         So think like a Search Bar and then a box that is empty until the user searches for
-         something 
-    -->
     <div class="flex flex-row w-full h-full justify-between m-2">
         <div class="flex flex-col w-2/5 h-full bg-slate-900 rounded-lg">
-            <div class="flex flex-row text-black bg-white rounded-lg w-full h-12 items-center">
-                <div class="p-1 pl-2">
-                    <MaterialSymbolsSearch/>
-                </div>
-                <input 
-                    bind:value={albumSearch}
-                    on:input={handleInput}
-                    class="w-full focus:outline-none rounded-lg focus:ring-0 pt-2 pb-2 pl-1 pr-2"
-                    type="search" 
-                    placeholder="Search..."
-                />
-            </div>
+            <SearchBar bind:value={albumSearch} on:input={handleInput} />
             <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
                 Test
             </div>

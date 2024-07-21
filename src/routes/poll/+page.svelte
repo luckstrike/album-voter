@@ -5,7 +5,6 @@
 
     let albumSearch: string;
     let isSearching: boolean = false;
-    let showDropdown: boolean = false;
     let searchResults: any[] = [];
     let error: string | null = null;
 
@@ -15,10 +14,8 @@
         if (albumSearch.length > 2) {
             const data = await handleSearch(albumSearch);
             searchResults = data;
-            showDropdown = true;
         } else {
             searchResults = [];
-            showDropdown = false;
         }
     }, 300);
 
@@ -84,33 +81,43 @@
     <div class="text-4xl font-bold bg-gradient-to-r from-blue-500 to-pink-700 inline-block text-transparent bg-clip-text leading-tight">
         Create a Poll
     </div>
-    <div class="flex flex-col items-center w-1/3">
-        <div class="flex flex-row text-black bg-white rounded-lg w-full mt-4 items-center">
-            <div class="p-1 pl-2">
-                <MaterialSymbolsSearch/>
+    <!-- Or I could turn the search bar into a rectangle component that searches for stuff
+         and updates the albums found without showing a dropdown
+         So think like a Search Bar and then a box that is empty until the user searches for
+         something 
+    -->
+    <div class="flex flex-row w-full h-full justify-between m-2">
+        <div class="flex flex-col w-2/5 h-full bg-slate-900 rounded-lg">
+            <div class="flex flex-row text-black bg-white rounded-lg w-full h-12 items-center">
+                <div class="p-1 pl-2">
+                    <MaterialSymbolsSearch/>
+                </div>
+                <input 
+                    bind:value={albumSearch}
+                    on:input={handleInput}
+                    class="w-full focus:outline-none rounded-lg focus:ring-0 pt-2 pb-2 pl-1 pr-2"
+                    type="search" 
+                    placeholder="Search..."
+                />
             </div>
-            <input 
-                bind:value={albumSearch}
-                on:input={handleInput}
-                class="w-full focus:outline-none rounded-lg focus:ring-0 pt-2 pb-2 pl-1 pr-2"
-                type="search" 
-                placeholder="Search..."
-            />
+            {#if searchResults.length > 0}
+                <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
+                    {#each searchResults as result}
+                        <div 
+                            class="p-2 hover:bg-gray-100 cursor-pointer"
+                            on:click={() => selectResult(result)}
+                        >
+                            {result.name}
+                        </div>
+                    {/each}
+                </div>
+            {/if}
         </div>
-        {#if showDropdown && searchResults.length > 0}
-            <div class="w-[100%] text-black bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
-                {#each searchResults as result}
-                    <div 
-                        class="p-2 hover:bg-gray-100 cursor-pointer"
-                        on:click={() => selectResult(result)}
-                    >
-                        {result.name}
-                    </div>
-                {/each}
-            </div>
+        {#if error}
+            <div class="text-red-500 mt-2">{error}</div>
         {/if}
+        <div class="flex flex-col bg-slate-900 rounded-lg w-1/2 h-[100%]">
+            <div class="flex flex-col text-center">Your Poll</div>
+        </div>
     </div>
-    {#if error}
-        <div class="text-red-500 mt-2">{error}</div>
-    {/if}
 </div>

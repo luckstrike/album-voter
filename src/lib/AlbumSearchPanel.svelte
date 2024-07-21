@@ -88,14 +88,14 @@
 	</div>
 
   <div class="flex-1 overflow-hidden flex justify-center">
-    <div aria-live="polite">
+    <div aria-live="polite" class="w-full">
         {#if isLoading}
             <div class="text-white text-center">Loading...</div>
         {:else if searchResults.length > 0}
-            <div class="h-full overflow-y-auto flex-1" role="list" aria-label="Search results">
+            <div class="h-full overflow-y-auto flex-1 w-full" role="list" aria-label="Search results">
                 {#each searchResults as result}
                     <div
-                        class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg"
+                        class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg w-full"
                         on:click={() => selectResult(result)}
                         role="button"
                         aria-label={`Select ${result.name} by ${result.artists[0].name}`}

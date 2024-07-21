@@ -87,34 +87,40 @@
 		/>
 	</div>
 
-	<div class="flex-1 overflow-hidden flex justify-center">
-		{#if isLoading}
-			<div class="text-white text-center">Loading...</div>
-		{:else if searchResults.length > 0}
-			<div class="h-full overflow-y-auto flex-1">
-				{#each searchResults as result}
-					<div
-						class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg"
-						on:click={() => selectResult(result)}
-					>
-						<img
-							src={result.images[2].url}
-							alt={result.name}
-							class="w-16 h-16 object-cover rounded flex-shrink-0"
-						/>
-						<div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
-							<div class="font-semibold text-black truncate">{result.name}</div>
-							<div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
-						</div>
-					</div>
-				{/each}
-			</div>
-		{:else if searchQuery !== ''}
-			<div class="text-white text-center">No results found</div>
-		{/if}
-	</div>
+  <div class="flex-1 overflow-hidden flex justify-center">
+    <div aria-live="polite">
+        {#if isLoading}
+            <div class="text-white text-center">Loading...</div>
+        {:else if searchResults.length > 0}
+            <div class="h-full overflow-y-auto flex-1" role="list" aria-label="Search results">
+                {#each searchResults as result}
+                    <div
+                        class="flex p-2 cursor-pointer hover:bg-gray-100 bg-white mb-2 rounded-lg"
+                        on:click={() => selectResult(result)}
+                        role="button"
+                        aria-label={`Select ${result.name} by ${result.artists[0].name}`}
+                        tabindex="0"
+                        on:keypress={(e) => e.key === 'Enter' && selectResult(result)}
+                    >
+                        <img
+                            src={result.images[2].url}
+                            alt={result.name}
+                            class="w-16 h-16 object-cover rounded flex-shrink-0"
+                        />
+                        <div class="flex flex-col justify-center p-2 min-w-0 flex-grow">
+                            <div class="font-semibold text-black truncate">{result.name}</div>
+                            <div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        {:else if searchQuery !== ''}
+            <div class="text-white text-center">No results found</div>
+        {/if}
+    </div>
+</div>
 
-	{#if error}
-		<div class="text-red-500 mt-2 flex-shrink-0">{error}</div>
-	{/if}
+{#if error}
+    <div class="text-red-500 mt-2 flex-shrink-0" aria-live="assertive">{error}</div>
+{/if}
 </div>

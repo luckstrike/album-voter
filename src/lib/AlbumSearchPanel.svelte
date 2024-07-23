@@ -3,6 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import MaterialSymbolsSearch from '~icons/material-symbols/search';
 	import IcBaselinePlus from '~icons/ic/baseline-plus';
+	import IcBaselineCheck from '~icons/ic/baseline-check';
 
 	export let initialSearchResults: any[] = [];
 	export let pollAlbums: any[] = [];
@@ -118,11 +119,11 @@
 				<div class="h-full overflow-y-auto flex-1 w-full" role="list" aria-label="Search results">
 					{#each searchResults as result}
 						<div
-							class="flex p-2 cursor-pointer mb-2 rounded-lg w-full
-							{result.isSelected ? 'bg-red-500 opacity-50 cursor-not-allowed' : 'bg-blue-500 hover:bg-gray-100'}"
-							on:click={() => selectResult(result)}
+							class="flex p-2 mb-2 rounded-lg w-full relative overflow-hidden
+					{result.isSelected ? 'bg-gray-300 cursor-default' : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'}"
+							on:click={() => !result.isSelected && selectResult(result)}
 							role="button"
-							aria-label={`Select ${result.name} by ${result.artists[0].name}`}
+							aria-label={`${result.isSelected ? 'Already added:' : 'Add'} ${result.name} by ${result.artists[0].name}`}
 							tabindex={result.isSelected ? -1 : 0}
 							on:keypress={(e) => !result.isSelected && e.key === 'Enter' && selectResult(result)}
 						>
@@ -135,8 +136,17 @@
 								<div class="font-semibold text-black truncate">{result.name}</div>
 								<div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
 							</div>
-							{#if !result.isSelected}
-								<IcBaselinePlus class="text-black" />
+							{#if result.isSelected}
+								<div
+									class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center"
+								>
+									<div class="bg-green-500 text-white px-2 py-1 rounded-full flex items-center">
+										<IcBaselineCheck class="mr-1" />
+										Added
+									</div>
+								</div>
+							{:else}
+								<IcBaselinePlus class="text-black self-center" />
 							{/if}
 						</div>
 					{/each}

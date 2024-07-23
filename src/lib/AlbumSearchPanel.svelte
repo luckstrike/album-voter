@@ -5,6 +5,7 @@
 	import IcBaselinePlus from '~icons/ic/baseline-plus';
 
 	export let initialSearchResults: any[] = [];
+	export let pollAlbums: any[] = [];
 	let className = '';
 	export { className as class };
 
@@ -18,6 +19,14 @@
 	const MAX_DISPLAYED_ALBUMS = 10; // Define this constant
 
 	const dispatch = createEventDispatcher();
+
+	$: {
+		// Update searchResults when pollAlbums changes
+		searchResults = searchResults.map((result) => ({
+			...result,
+			isSelected: pollAlbums.some((album) => album.id === result.id)
+		}));
+	}
 
 	const handleInput = debounce(async () => {
 		if (searchQuery.length > 2) {
@@ -59,9 +68,13 @@
 
 			// Returning only the list of albums
 			const filteredAlbums = removeDuplicates(
-				data.albums.items
-					.filter((result: any) => result.album_type === 'album')
-			).slice(0, MAX_DISPLAYED_ALBUMS);
+				data.albums.items.filter((result: any) => result.album_type === 'album')
+			)
+				.slice(0, MAX_DISPLAYED_ALBUMS)
+				.map((album: any) => ({
+					...album,
+					isSelected: pollAlbums.some((selectedAlbum) => selectedAlbum.id === album.id)
+				}));
 
 			return filteredAlbums;
 		} catch (err) {
@@ -71,21 +84,15 @@
 	}
 
 	function selectResult(result: any) {
-		if (selectedAlbums.some(album => album.id === result.id)) {
+		if (result.isSelected) {
 			return; // prevents reselection
 		}
 
-		selectedAlbums = [...selectedAlbums, result];
-		
-		dispatch('albumSelected', { id: result.id, selectedAlbums: selectedAlbums });
-		
-		// Force re-render
-		searchResults = [...searchResults];
-	}
+		const updatedAlbums = [...pollAlbums, result];
+		dispatch('albumSelected', { id: result.id, selectedAlbums: updatedAlbums });
 
-	function isSelected(albumId: string) {
-		const selected = selectedAlbums.some(album => album.id === albumId);
-		return selected;
+		// Update the local state
+		result.isSelected = true;
 	}
 </script>
 
@@ -112,15 +119,12 @@
 					{#each searchResults as result}
 						<div
 							class="flex p-2 cursor-pointer mb-2 rounded-lg w-full
-								{isSelected(result.id) 
-									? 'bg-red-500 opacity-50 cursor-not-allowed' 
-									: 'bg-blue-500 hover:bg-gray-100'}"
+							{result.isSelected ? 'bg-red-500 opacity-50 cursor-not-allowed' : 'bg-blue-500 hover:bg-gray-100'}"
 							on:click={() => selectResult(result)}
 							role="button"
 							aria-label={`Select ${result.name} by ${result.artists[0].name}`}
-							tabindex={isSelected(result.id) ? -1 : 0}
-							on:keypress={(e) =>
-								!isSelected(result.id) && e.key === 'Enter' && selectResult(result)}
+							tabindex={result.isSelected ? -1 : 0}
+							on:keypress={(e) => !result.isSelected && e.key === 'Enter' && selectResult(result)}
 						>
 							<img
 								src={result.images[2].url}
@@ -131,7 +135,7 @@
 								<div class="font-semibold text-black truncate">{result.name}</div>
 								<div class="text-sm text-gray-600 truncate">{result.artists[0].name}</div>
 							</div>
-							{#if !isSelected(result.id)}
+							{#if !result.isSelected}
 								<IcBaselinePlus class="text-black" />
 							{/if}
 						</div>

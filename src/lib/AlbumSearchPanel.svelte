@@ -17,7 +17,8 @@
 
 	let selectedAlbums: any[] = [];
 
-	const MAX_DISPLAYED_ALBUMS = 10; // Define this constant
+	// Max amount of albums that can be shown in the Album Search Panel UI
+	const MAX_DISPLAYED_ALBUMS = 20;
 
 	const dispatch = createEventDispatcher();
 
